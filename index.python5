@@ -1,0 +1,34 @@
+import requests
+from bs4 import BeautifulSoup
+import csv
+
+base_url = "https://books.toscrape.com/"
+page_url = "catalogue/page-1.html"
+
+# Open CSV file
+with open("all_books.csv", "w", newline="", encoding="utf-8") as file:
+    writer = csv.writer(file)
+    writer.writerow(["Title", "Price", "Rating"])
+
+    while True:
+        print(f"Scraping: {base_url + page_url}")
+        response = requests.get(base_url + page_url)
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        # Find all books
+        books = soup.find_all("article", class_="product_pod")
+        for book in books:
+            title = book.h3.a["title"]
+            price = book.find("p", class_="price_color").text.strip()
+            rating = book.find("p", class_="star-rating")["class"][1]
+            writer.writerow([title, price, rating])
+
+        # Check if "next" button exists
+        next_btn = soup.find("li", class_="next")
+        if next_btn:
+            next_link = next_btn.a["href"]
+            page_url = "catalogue/" + next_link
+        else:
+            break
+
+print("✅ All books scraped and saved to all_books.csv")
