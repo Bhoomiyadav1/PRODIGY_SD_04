@@ -8,9 +8,9 @@ This Python script scrapes book information from **[books.toscrape.com](https://
 
 - Scrapes *all 1000 books* listed on the website
 - Collects:
-  - 🏷 Book Title
-  - 💰 Price
-  - ⭐ Rating
+  - Book Title
+  - Price
+  - Rating
 - Automatically saves data to all_books.csv
 
 ---
